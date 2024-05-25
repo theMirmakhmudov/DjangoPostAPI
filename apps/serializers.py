@@ -1,15 +1,14 @@
 from rest_framework import serializers
-from .models import FaceModel
+from .models import FaceModel, ExampleModel
 
 
-class FaceSerializer(serializers.Serializer):
-    fullname = serializers.CharField(max_length=255)
-    user_id = serializers.IntegerField()
-    image = serializers.ImageField()
-
+class FaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = FaceModel
-        fields = ["id", "fullname", "user_id", "image"]
+        fields = ("id", "fullname", "user_id", "image")
 
-    def create(self, validated_data):
-        return FaceModel.objects.create(**validated_data)
+
+class ExampleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExampleModel
+        fields = ("id", "fullname", "user_id")

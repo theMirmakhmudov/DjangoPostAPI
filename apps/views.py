@@ -1,13 +1,12 @@
-from rest_framework.generics import CreateAPIView, ListAPIView
-from .serializers import FaceSerializer
-from .models import FaceModel
+from rest_framework.generics import ListCreateAPIView, ListAPIView
+from .serializers import FaceSerializer, ExampleSerializer
+from .models import FaceModel, ExampleModel
 
 
-class FaceCreateAPI(CreateAPIView):
+class FaceCreateAPI(ListCreateAPIView):
     queryset = FaceModel.objects.all()
     serializer_class = FaceSerializer
 
-
-class FaceListAPI(ListAPIView):
-    queryset = FaceModel.objects.all()
-    serializer_class = FaceSerializer
+class ExampleAPI(ListCreateAPIView):
+    queryset = ExampleModel.objects.all()
+    serializer_class = ExampleSerializer

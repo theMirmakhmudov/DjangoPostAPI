@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import FaceCreateAPI, FaceListAPI
+from .views import FaceCreateAPI, ExampleAPI
 
 urlpatterns = [
-    path("create", FaceCreateAPI.as_view(), name="create"),
-    path("", FaceListAPI.as_view(), name="listview"),
+    path("", FaceCreateAPI.as_view(), name="v1"),
+    path("example", ExampleAPI.as_view(), name="v2")
 ]

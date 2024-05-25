@@ -128,7 +128,7 @@ JAZZMIN_SETTINGS = {
 
     "welcome_sign": "Salom Admin pagega xo'sh kelibsiz",
 
-    "search_model": ["auth.User", "apps.Product", "apps.Category"],
+    "search_model": ["auth.User", "apps.FaceModel"],
 
     # applarni yashirish uchun
     "hide_apps": [],
@@ -144,9 +144,50 @@ JAZZMIN_SETTINGS = {
     ],
     # user iconka sin chiqarish uchun
     "usermenu_links": [
-        {"name": "Support", "url": "https://github.com/theMirmakhmudov", "new_window": True},
+        {"name": "Support", "url": "https://github.com/AllTema", "new_window": True},
         # {"model": "auth.user"},
     ],
+    "copyright": "All Team",
 
     "show_ui_builder": True,
+    # "language_chooser": True,
+    "default_icon_parents": "fas fa-chevron-circle-right",
+    "default_icon_children": "fa fa-layer-group",
+    'icons': {
+        'apps.FaceModel': 'fa fa-qrcode',  # Post modeliga ikona qo'shish
+        'auth.user': 'fas fa-user',  # User modeliga ikona qo'shish
+        'auth.group': 'fas fa-users',  # Group modeliga ikona qo'shish
+    },
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": True,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": False,
+    "accent": "accent-primary",
+    "navbar": "navbar-dark",
+    "no_navbar_border": False,
+    "navbar_fixed": False,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": False,
+    "sidebar": "sidebar-dark-primary",
+    "sidebar_nav_small_text": True,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": False,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "theme": "darkly",
+    "dark_mode_theme": "cyborg",
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success"
+    }
 }
