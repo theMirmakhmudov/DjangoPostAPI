@@ -85,13 +85,13 @@ async def register_image(message: types.Message, state: FSMContext, bot: Bot):
             # Natijalarni ko'rsatish
             if len(faces) > 1:
                 photo_valid = False
-                await message.answer(f"<b>{len(faces)} ta yuz topildi!\n Qayta yuboring ❌</b>")
+                await message.answer(f"<b>{len(faces)} ta yuz topildi!\nQayta yuboring ❌</b>")
             elif len(faces) == 1:
                 photo_valid = True
                 await message.answer("<b>Rasm yuklandi ✅</b>")
             else:
                 photo_valid = False
-                await message.answer("<b>Hech qanday yuz topilmadi.</b>")
+                await message.answer("<b>Hech qanday yuz topilmadi.\nQayta yuboring ❌</b>")
 
             # Yuzlarni belgilash va rasmni ko'rsatish
             for (x, y, w, h) in faces:
@@ -107,7 +107,7 @@ async def register_image(message: types.Message, state: FSMContext, bot: Bot):
                 fullname = data.get("fullname", "Unknown")
                 user_id = data.get("user_id", "Unknown")
             else:
-                await message.answer("<b>Xatolik qayta urining ❌\nQayta boshlash uchun: /start</b>")
+                ...
 
             def create_user(fullname, user_id):
                 url = "http://127.0.0.1:8000/"
