@@ -36,7 +36,8 @@
 # #         'user_id': 56738292
 # #     })
 # # print(response.json())
-from PostBot.main import db
+import os
+from urllib.parse import urlparse
 
 # import cv2
 #
@@ -71,5 +72,21 @@ from PostBot.main import db
 #     cv2.waitKey(0)
 #     cv2.destroyAllWindows()
 
-for user in db.get_count:
-    print(user[0])
+import requests
+
+url = "http://127.0.0.1:8000/v2"
+
+response = requests.get(url)
+
+if response.status_code == 200:
+    data = response.json()
+    for item in data:
+        face_model_check = item.get('FaceModelCheck', {})
+        if face_model_check:
+            image_url = face_model_check["image"]
+            image_name = os.path.basename(urlparse(image_url).path)
+            print(image_name)
+else:
+    print(f"Failed to retrieve data. Status code: {response.status_code}")
+
+

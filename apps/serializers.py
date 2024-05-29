@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import FaceModel, ExampleModel
+from .models import FaceModel, CheckFaceModel
 
 
 class FaceSerializer(serializers.ModelSerializer):
@@ -8,7 +8,9 @@ class FaceSerializer(serializers.ModelSerializer):
         fields = ("id", "fullname", "user_id", "image")
 
 
-class ExampleSerializer(serializers.ModelSerializer):
+class CheckFaceSerializer(serializers.ModelSerializer):
+    FaceModelCheck = FaceSerializer()
+
     class Meta:
-        model = ExampleModel
-        fields = ("id", "fullname", "user_id")
+        model = CheckFaceModel
+        fields = ('id', 'FaceModelCheck')
