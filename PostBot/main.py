@@ -4,7 +4,7 @@ import os
 
 import requests
 from aiogram import Dispatcher, F, types
-from aiogram.enums import ParseMode, MessageEntityType, ContentType
+from aiogram.enums import ParseMode, MessageEntityType
 from aiogram.filters import Command
 from aiogram import Bot
 from aiogram.types import BotCommand, BufferedInputFile
@@ -22,6 +22,7 @@ Channel = os.getenv("CHANNEL")
 DB = os.getenv("DB_NAME")
 dp = Dispatcher()
 db = Database(f"../db.sqlite3")
+admin_list = [6543698942, 6716993468]
 
 
 @dp.message(Command("start"))
@@ -35,66 +36,89 @@ async def cmd_start(message: types.Message, state: FSMContext, bot: Bot):
             await state.set_state(AdminAdvertisement.photo)
             await message.answer("<b>Reklamaning rasmini yuboring 🖼</b>", reply_markup=types.ReplyKeyboardRemove())
 
-        @dp.message(AdminAdvertisement.photo and F.document)
-        async def send_advertisement_photo(message: types.Message, state: FSMContext, bot: Bot):
+            @dp.message(AdminAdvertisement.photo and F.document)
+            async def send_advertisement_photo(message: types.Message, state: FSMContext, bot: Bot):
 
-            if F.document:
-                docs = message.document
-                document_info = await bot.get_file(docs.file_id)
-                file_path = f'https://api.telegram.org/file/bot{TOKEN}/{document_info.file_path}'
-                response = requests.get(file_path)
+                if F.document:
+                    docs = message.document
+                    document_info = await bot.get_file(docs.file_id)
+                    file_path = f'https://api.telegram.org/file/bot{TOKEN}/{document_info.file_path}'
+                    response = requests.get(file_path)
 
-                if response.status_code == 200:
-                    save_directory = 'photos'
-                    if not os.path.exists(save_directory):
-                        os.makedirs(save_directory)
+                    if response.status_code == 200:
+                        save_directory = 'photos'
+                        if not os.path.exists(save_directory):
+                            os.makedirs(save_directory)
 
-                    save_path = os.path.join(save_directory, "Advertisement_photo" + '.jpg')
+                        save_path = os.path.join(save_directory, "Advertisement_photo" + '.jpg')
 
-                    with open(save_path, 'wb') as f:
-                        f.write(response.content)
-                        print("Saqlandi  ✅")
-                        await state.set_state(AdminAdvertisement.caption)
-                        await message.answer("<b>Reklamaning matnini kiriting:</b>")
-
-                else:
-                    print("Saqlanmadi ❌")
-
-            @dp.message(AdminAdvertisement.photo and F.entities[:].type == MessageEntityType.URL)
-            async def send_advertisement_photo(message: types.Message, state: FSMContext):
-                if F.entities[:].type == MessageEntityType.URL:
-                    await state.update_data(photo=message.text)
-                    await message.answer("<b>Reklamaning matnini kiriting:</b>")
-                    await state.set_state(AdminAdvertisement.caption)
-                else:
-                    print("Xatolik ❌")
-
-            @dp.message(AdminAdvertisement.caption)
-            async def send_advertisement_caption(message: types.Message, state: FSMContext, bot: Bot):
-                await state.update_data(caption=message.text)
-                await state.set_state(AdminAdvertisement.finish)
-                await state.set_state(AdminAdvertisement.finish)
-                data = await state.get_data()
-                await state.clear()
-                photo = data.get("photo", "Unknown")
-                caption = data.get("caption", "Unknown")
-
-                await message.answer("<b>📢 Reklama jo'natish boshlandi...</b>")
-                for user in db.get_ids_users:
-                    if photo == "Unknown":
-                        photo_path = "photos/Advertisement_photo.jpg"
-                        with open(photo_path, 'rb') as photo_file:
-                            photo = BufferedInputFile(photo_file.read(), filename='photo.jpg')
-                            await bot.send_photo(chat_id=user[0], photo=photo,
-                                                 caption=f"<b>{caption}\n🤖 {bot_info.mention_html()}</b>")
-
-                    elif photo != "Unknown":
-                        await bot.send_photo(chat_id=user[0], photo=photo,
-                                             caption=f"<b>{caption}\n\n🤖 {bot_info.mention_html()}</b>")
+                        with open(save_path, 'wb') as f:
+                            f.write(response.content)
+                            print("Saqlandi  ✅")
+                            await state.set_state(AdminAdvertisement.caption)
+                            await message.answer("<b>Reklamaning matnini kiriting:</b>")
 
                     else:
-                        print("Reklama yuborishda xatolik !")
-                await message.answer(f"<b>Reklama yuborish yakunlandi ✅\n\n🤖 {bot_info.mention_html()}</b>")
+                        print("Saqlanmadi ❌")
+
+                @dp.message(AdminAdvertisement.photo and F.entities[:].type == MessageEntityType.URL)
+                async def send_advertisement_photo(message: types.Message, state: FSMContext):
+                    if F.entities[:].type == MessageEntityType.URL:
+                        await state.update_data(photo=message.text)
+                        await message.answer("<b>Reklamaning matnini kiriting:</b>")
+                        await state.set_state(AdminAdvertisement.caption)
+                    else:
+                        print("Xatolik ❌")
+
+                @dp.message(AdminAdvertisement.caption)
+                async def send_advertisement_caption(message: types.Message, state: FSMContext, bot: Bot):
+                    await state.update_data(caption=message.text)
+                    await state.set_state(AdminAdvertisement.finish)
+                    await state.set_state(AdminAdvertisement.finish)
+                    data = await state.get_data()
+                    await state.clear()
+                    photo = data.get("photo", "Unknown")
+                    caption = data.get("caption", "Unknown")
+
+                    await message.answer("<b>📢 Reklama jo'natish boshlandi...</b>")
+                    for user in db.get_ids_users:
+                        if photo == "Unknown":
+                            photo_path = "photos/Advertisement_photo.jpg"
+                            with open(photo_path, 'rb') as photo_file:
+                                photo = BufferedInputFile(photo_file.read(), filename='photo.jpg')
+                                await bot.send_photo(chat_id=user[0], photo=photo,
+                                                     caption=f"<b>{caption}\n🤖 {bot_info.mention_html()}</b>")
+
+                        elif photo != "Unknown":
+                            await bot.send_photo(chat_id=user[0], photo=photo,
+                                                 caption=f"<b>{caption}\n\n🤖 {bot_info.mention_html()}</b>")
+
+                        else:
+                            print("Reklama yuborishda xatolik !")
+                    await message.answer(f"<b>Reklama yuborish yakunlandi ✅\n\n🤖 {bot_info.mention_html()}</b>")
+
+        @dp.message(F.text == "Userlar soni 👤")
+        async def User_count(message: types.Message):
+            for count in db.get_count:
+                await message.answer(f"<b>Bot foydalanuvchilari soni: {count[0]} 👤</b>")
+
+        @dp.message(F.text == "Admin Qo'shish 🧑‍💻")
+        async def add_admin(message: types.Message):
+            await message.answer("<b>Admin telegram id sini yuboring:</b>")
+
+            @dp.message(F.text)
+            async def add_admin_check(message: types.Message):
+                if message.text.isnumeric() and len(message.text) == 10:
+                    await message.answer("<b>Admin muvaffaqiyatli qo'shildi ✅</b>")
+                    admin_list.append(int(message.text))
+                else:
+                    await message.answer("<b>Admin telegram id si xato kiritildi ❌</b>")
+
+        @dp.message(F.text == "Adminlarga xabar yuborish ✉️")
+        async def send_message_admin(message: types.Message):
+            for admin in admin_list:
+                await bot.send_message(chat_id=admin, text="Adminlar uchun test xabar!")
+
 
 
 

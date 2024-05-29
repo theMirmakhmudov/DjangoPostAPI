@@ -71,5 +71,5 @@ from PostBot.main import db
 #     cv2.waitKey(0)
 #     cv2.destroyAllWindows()
 
-for user in db.get_ids_users:
+for user in db.get_count:
     print(user[0])

@@ -18,12 +18,17 @@ class Database:
     @property
     def get_count(self):
         with self.connection:
-            return self.cursor.execute("SELECT COUNT(*) FROM apps_facemodel;")
+            return self.cursor.execute("SELECT COUNT(*) FROM apps_facemodel")
 
     @property
     def get_all_users(self):
         with self.connection:
             return self.cursor.execute("SELECT * FROM apps_facemodel").fetchall()
+
+    @property
+    def get_all_face(self):
+        with self.connection:
+            return self.cursor.execute("SELECT image FROM apps_facemodel").fetchall()
 
 
 conn.close()  # Closing database connection
